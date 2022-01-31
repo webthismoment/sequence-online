@@ -4,15 +4,24 @@
   "description": "",
   "main": "app.js",
   "dependencies": {
+    "cookie-parser": "~1.4.4",
+    "debug": "~2.6.9",
     "express": "^4.17.2",
     "http": "^0.0.1-security",
+    "morgan": "~1.9.1",
     "socket.io": "^4.4.1"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "nodemon": "1.18.4"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start":"node app.js"
+    "start":"nodemon app.js localhost 8080"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "keywords": [
+    "expressjs",
+    "express"
+  ]
 }
