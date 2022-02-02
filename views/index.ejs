@@ -4,14 +4,15 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title><%= title %></title>
 </head>
 <body>
     <button onclick="buttonClicked()">붐</button>
     <button onclick="callbacked()">callback 테스트</button>
+    <button onclick="orderCreate()">orderCreate 테스트</button>
     <script src="https://cdn.socket.io/4.4.1/socket.io.min.js" integrity="sha384-fKnu0iswBIqkjxrhQCTZ7qlLHOFEgNkRmK2vaO/LbTZSXdJfAu6ewRBdwHPhBo/H" crossorigin="anonymous"></script>
     <script>
-        const socket = io("localhost:5500")
+        const socket = io()
         function buttonClicked(){
             socket.emit("text", "으악")
         }
@@ -19,6 +20,9 @@
             socket.emit("callback", {"id":1, "pw":222}, (res)=>{
                 console.log(res);
             })
+        }
+        function orderCreate(){
+            socket.emit("order:create", {"id":1, "pw":222})
         }
     </script>
 </body>
