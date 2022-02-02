@@ -14,13 +14,23 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
-var indexRouter = require("./routes/index");
-//var socketRouter = require("./routes/socket");
-
-app.use("/", indexRouter);
-//app.use("/socket", socketRouter);
-
 server.listen(8080, () => console.log("#### 서버 시작 ####"));
+
+let gameType
+//var indexRouter = require("./routes/index");
+
+//app.use("/", indexRouter);
+app.get("/", (req, res, next)=>{
+    res.render("index.ejs", {
+        title: 'Express'
+    })
+})
+
+app.get("/room/:gameType", (req, res, next)=>{
+    res.render("room.ejs", {
+        type: req.params.gameType,
+    })
+})
 
 
 const registerOrderHandlers = require("./socket");
@@ -28,19 +38,8 @@ const registerOrderHandlers = require("./socket");
 //socket 
 let player_cnt = 0;
 io.on("connection", (socket) => {
-    //socket.join(`${}`);
-    //io.to("room1").to("room2").to("room3").emit("some event");
-    
     const { url } = socket.request;
     console.log(`연결됨: ${url}`);
-
-    socket.on("text", (text)=> console.log(`메세지: ${text}`));
-
-    socket.on("callback", (data, cb) => {
-        console.log(data);
-        cb({result:false, data:"이미 존재"})
-        return false;
-    });
 
     registerOrderHandlers(io, socket);
     

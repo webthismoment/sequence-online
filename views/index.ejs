@@ -7,23 +7,8 @@
     <title><%= title %></title>
 </head>
 <body>
-    <button onclick="buttonClicked()">붐</button>
-    <button onclick="callbacked()">callback 테스트</button>
-    <button onclick="orderCreate()">orderCreate 테스트</button>
-    <script src="https://cdn.socket.io/4.4.1/socket.io.min.js" integrity="sha384-fKnu0iswBIqkjxrhQCTZ7qlLHOFEgNkRmK2vaO/LbTZSXdJfAu6ewRBdwHPhBo/H" crossorigin="anonymous"></script>
-    <script>
-        const socket = io()
-        function buttonClicked(){
-            socket.emit("text", "으악")
-        }
-        function callbacked(){
-            socket.emit("callback", {"id":1, "pw":222}, (res)=>{
-                console.log(res);
-            })
-        }
-        function orderCreate(){
-            socket.emit("order:create", {"id":1, "pw":222})
-        }
-    </script>
+    <a href="room/1vs1">1vs1</a>
+    <a href="room/1vs1vs1">1vs1vs1</a>
+    <a href="room/2vs2">2vs2</a>
 </body>
 </html>
