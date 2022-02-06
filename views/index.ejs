@@ -4,11 +4,57 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet" />
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet" />
+    <!-- MDB -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.10.2/mdb.min.css" rel="stylesheet" />
+
     <title><%= title %></title>
+    <style>
+        .container-540{
+            width:540px;
+            margin: auto;
+        }
+        @media screen and (max-width:576px) {
+            .container-540{
+                width: 100%;
+            }
+        }
+        ul.list-cursor-point > li{
+            cursor:pointer;
+        }
+    </style>
 </head>
 <body>
-    <a href="room/1vs1">1vs1</a>
-    <a href="room/1vs1vs1">1vs1vs1</a>
-    <a href="room/2vs2">2vs2</a>
+    <div class="container-540 mt-5">
+        <ul class="list-group list-cursor-point">
+            <li class="list-group-item d-flex justify-content-between align-items-center"
+                onClick="location.href='/room/1vs1'">
+                1vs1
+                <span class="badge bg-primary rounded-pill"><%= participants.room1vs1 %>/2</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center"
+                onClick="location.href='/room/1vs1vs1'">
+                1vs1vs1
+                <span class="badge bg-primary rounded-pill"><%= participants.room1vs1vs1 %>/3</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center"
+            onClick="location.href='/room/2vs2'">
+                2vs2
+                <span class="badge bg-primary rounded-pill"><%= participants.room2vs2 %>/4</span>
+            </li>
+          </ul>
+
+        <!-- <a href="room/1vs1">1vs1</a>
+        <a href="room/1vs1vs1">1vs1vs1</a>
+        <a href="room/2vs2">2vs2</a> -->
+
+    </div>
+    
+    <!-- MDB -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.10.2/mdb.min.js" ></script>
 </body>
 </html>

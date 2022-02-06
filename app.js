@@ -17,34 +17,49 @@ app.use(express.static(path.join(__dirname, "public")));
 server.listen(8080, () => console.log("#### 서버 시작 ####"));
 
 let gameType
+let participants = {
+    "room1vs1":0,
+    "room1vs1vs1":0,
+    "room2vs2":0
+}
 //var indexRouter = require("./routes/index");
 
 //app.use("/", indexRouter);
 app.get("/", (req, res, next)=>{
     res.render("index.ejs", {
-        title: 'Express'
+        title: 'Express',
+        participants
     })
 })
 
 app.get("/room/:gameType", (req, res, next)=>{
     res.render("room.ejs", {
-        type: req.params.gameType,
+        gameType: req.params.gameType,
     })
 })
 
 
-const registerOrderHandlers = require("./socket");
+const socketReceive = require("./socket");
 
 //socket 
 let player_cnt = 0;
 io.on("connection", (socket) => {
+    //socket.join(`${}`);
     const { url } = socket.request;
     console.log(`연결됨: ${url}`);
 
-    registerOrderHandlers(io, socket);
+    socketReceive(io, socket, participants);
     
     //disconnect
-    socket.on("disconnect", ()=>{
+    socket.on("disconnecting", (reason) => {
+        for (const room of socket.rooms) {
+            if (room !== socket.id) {
+                //socket.to(room).emit("user has left", socket.id);
+                participants[room] -= 1;
+            }
+        }
+    })
+    socket.on("disconnect", (reason)=>{
         console.log("user disconnected");
     })
 });
