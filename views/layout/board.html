@@ -1,0 +1,382 @@
+<style>
+    .game-board {position:relative;}
+    .game-board .col{
+        height:70px;
+        background-position: center bottom;
+        background-repeat: no-repeat;
+        background-size: 35px;
+        border: 1px solid #000;
+        font-size:1.5rem;
+        padding:0;
+        text-align: center;
+        user-select:none;
+        position: relative;
+    }
+
+    .game-board .circle{ background-image:url('/images/circle.png'); background-position:center center;}
+    .game-board .spade{ background-image:url('/images/spade.png'); }
+    .game-board .diamond{ background-image:url('/images/diamond.png'); color:#ed3c49; }
+    .game-board .clover{ background-image:url('/images/clover.png'); }
+    .game-board .heart{ background-image:url('/images/heart.png'); color:#ed3c49; }
+
+    .stone{
+        font-size:1.75rem;
+        position: absolute;
+        left: 0;
+        right: 0;
+        line-height: 70px;
+    }
+    .stone-team-0{color: green;}
+    .stone-team-1{color: blue;}
+
+    .bingo {
+        position:absolute;
+        border-width: 4px;
+        border-style: solid;
+        z-index:11;
+        display:none;
+    }
+    .bingo.active{display:block;}
+    .bingo-team-0 {border-color: #3fff3f;}
+    .bingo-team-1 {border-color: #5252ff;}
+</style>
+<div class="container">
+    <h1>Sequence Online</h1>
+    <div class="row">
+        <div class="col-12 col-md-4 game-board">
+            <div class="bingo bingo-team-0"></div>
+            <div class="bingo bingo-team-1"></div>
+            <div class="row 1">
+                <div class="col circle"></div>
+                <div class="col spade">2</div>
+                <div class="col spade">3</div>
+                <div class="col spade">4</div>
+                <div class="col spade">5</div>
+                <div class="col spade">6</div>
+                <div class="col spade">7</div>
+                <div class="col spade">8</div>
+                <div class="col spade">9</div>
+                <div class="col circle"></div>
+            </div>
+            <div class="row 2">
+                <div class="col clover">6</div>
+                <div class="col clover">5</div>
+                <div class="col clover">4</div>
+                <div class="col clover">3</div>
+                <div class="col clover">2</div>
+                <div class="col heart">A</div>
+                <div class="col heart">K</div>
+                <div class="col heart">Q</div>
+                <div class="col heart">10</div>
+                <div class="col spade">10</div>
+            </div>
+            <div class="row 3">
+                <div class="col clover">7</div>
+                <div class="col spade">A</div>
+                <div class="col diamond">2</div>
+                <div class="col diamond">3</div>
+                <div class="col diamond">4</div>
+                <div class="col diamond">5</div>
+                <div class="col diamond">6</div>
+                <div class="col diamond">7</div>
+                <div class="col heart">9</div>
+                <div class="col spade">Q</div>
+            </div>
+            <div class="row 4">
+                <div class="col clover">8</div>
+                <div class="col spade">K</div>
+                <div class="col clover">6</div>
+                <div class="col clover">5</div>
+                <div class="col clover">4</div>
+                <div class="col clover">3</div>
+                <div class="col clover">2</div>
+                <div class="col diamond">8</div>
+                <div class="col heart">8</div>
+                <div class="col spade">K</div>
+            </div>
+            <div class="row 5">
+                <div class="col clover">9</div>
+                <div class="col spade">Q</div>
+                <div class="col clover">7</div>
+                <div class="col heart">6</div>
+                <div class="col heart">5</div>
+                <div class="col heart">4</div>
+                <div class="col heart">A</div>
+                <div class="col diamond">9</div>
+                <div class="col heart">7</div>
+                <div class="col spade">A</div>
+            </div>
+            <div class="row 6">
+                <div class="col clover">10</div>
+                <div class="col spade">10</div>
+                <div class="col clover">8</div>
+                <div class="col heart">7</div>
+                <div class="col heart">2</div>
+                <div class="col heart">3</div>
+                <div class="col heart">K</div>
+                <div class="col diamond">10</div>
+                <div class="col heart">6</div>
+                <div class="col diamond">2</div>
+            </div>
+            <div class="row 7">
+                <div class="col clover">Q</div>
+                <div class="col spade">9</div>
+                <div class="col clover">9</div>
+                <div class="col heart">8</div>
+                <div class="col heart">9</div>
+                <div class="col heart">10</div>
+                <div class="col heart">Q</div>
+                <div class="col diamond">Q</div>
+                <div class="col heart">5</div>
+                <div class="col diamond">3</div>
+            </div>
+            <div class="row 8">
+                <div class="col clover">K</div>
+                <div class="col spade">8</div>
+                <div class="col clover">10</div>
+                <div class="col clover">Q</div>
+                <div class="col clover">K</div>
+                <div class="col clover">A</div>
+                <div class="col diamond">A</div>
+                <div class="col diamond">K</div>
+                <div class="col heart">4</div>
+                <div class="col diamond">4</div>
+            </div>
+            <div class="row 9">
+                <div class="col clover">A</div>
+                <div class="col spade">7</div>
+                <div class="col spade">6</div>
+                <div class="col spade">5</div>
+                <div class="col spade">4</div>
+                <div class="col spade">3</div>
+                <div class="col spade">2</div>
+                <div class="col heart">2</div>
+                <div class="col heart">3</div>
+                <div class="col diamond">5</div>
+            </div>
+            <div class="row 10">
+                <div class="col circle"></div>
+                <div class="col diamond">A</div>
+                <div class="col diamond">K</div>
+                <div class="col diamond">Q</div>
+                <div class="col diamond">10</div>
+                <div class="col diamond">9</div>
+                <div class="col diamond">8</div>
+                <div class="col diamond">7</div>
+                <div class="col diamond">6</div>
+                <div class="col circle"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<!-- <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script> -->
+<!-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script> -->
+<script>
+    class Cell{
+        costructor(){
+
+        }
+        IsBingo = false;	//빙고에 포함되었는지?
+        IsCommon;	//코너 공용인지
+        WhichStone = null; //어떤 돌이 놓였는지
+    }
+</script>
+<script>
+    //board 초기화
+    let board = {};
+    board.cells = [];
+    board.cellHeight = $(".game-board .col:first").height();
+    board.cellWidth = $(".game-board .col:first").width();
+    for(i=0;i<10;i++){
+        board.cells[i] = [];
+        for(j=0;j<10;j++)
+        board.cells[i][j] = new Cell();
+    }
+    board.cells[0][0].IsCommon = board.cells[0][9].IsCommon = board.cells[9][0].IsCommon = board.cells[9][9].IsCommon = true;
+    let order = 0;
+    /*
+    const detectBingo = () => {
+        for(){	//iterate
+            if(board[][] == "team1"){
+                count++;
+                if(count == 5){
+                    return true;
+                }
+            }	
+            else
+                count = 0;
+            if(board[][]-1 == "already bingo" && board[][]+1 == "aleady bingo")
+                count = 0;
+            
+        }
+    };
+    */
+    
+    const bingoCheck = () => {
+        //common인가
+        //WhichStone
+        //IsBingo이라면 앞뒤 확인
+    }
+    const drawBingo = (x1, y1, x2, y2, team) => {
+        const a = x1-x2;
+        const b = y1-y2;
+        const c = Math.sqrt(a*a + b*b);
+
+        const sx = (x1+x2)/2;
+        const sy = (y1+y2)/2;
+
+        const x = sx - c /2;
+        const y = sy;
+
+        const alpha = Math.PI - Math.atan2(-b,a);
+        $(`.bingo-team-${order}`).addClass("active").css({
+            "top":`${y}px`,
+            "left":`${x}px`,
+            "width":`${c}px`,
+            "transform":`rotate(${alpha}rad)`
+        });
+    }
+    $(".game-board .col:not('.circle')").click(function(){
+        $this = $(this);
+        if($this.html().includes("stone")){
+            alert("돌을 놓을 수 없습니다.");
+            return;
+        }
+
+        $stone = `<i class="fas fa-circle stone stone-team-${order}"></i>`;
+        $this.append($stone);
+
+        //board[i][j]
+        let row, col, i, j, sum, diff;
+        const cells = board.cells;
+        for(i=0;i<10;i++){
+            for(j=0;j<10;j++){
+                if( $this.is($(`.game-board .row:nth(${i}) .col:nth(${j})`)) )
+                {
+                    row = i;
+                    col = j;
+                    sum = i+j;
+                    diff = Math.abs(i-j);
+                    cells[i][j].WhichStone = order;
+                    break;
+                }
+            }
+        }
+
+        //연속 5개 감지
+        //row
+        let count = 0;
+        for(j=0;j<10;j++){
+            //bingoCheck()
+            if(cells[row][j].WhichStone == order || cells[row][j].IsCommon == true)
+                count += 1;
+            else 
+                count = 0;
+            
+            if(count == 5){
+                const x1 = (j-4 + 0.5)*(board.cellWidth+2);
+                const x2 = (j + 0.5)*(board.cellWidth+2);
+                const y1 = (row + 0.5)*(board.cellHeight+2);
+                const y2 = (row + 0.5)*(board.cellHeight+2);
+
+                drawBingo(x1, y1, x2, y2, order);
+                cells[row][j].IsBingo = true;
+                cells[row][j-1].IsBingo = true;
+                cells[row][j-2].IsBingo = true;
+                cells[row][j-3].IsBingo = true;
+                cells[row][j-4].IsBingo = true;
+                break;
+            }
+        }
+        //col
+        count = 0;
+        for(i=0;i<10;i++){
+            //bingoCheck()
+            if(cells[i][col].WhichStone == order || cells[i][col].IsCommon == true)
+                count += 1;
+            else 
+                count = 0;
+            
+            if(count == 5){
+                const x1 = (col + 0.5)*(board.cellWidth+2);
+                const x2 = (col + 0.5)*(board.cellWidth+2);
+                const y1 = (i-4 + 0.5)*(board.cellHeight+2);
+                const y2 = (i + 0.5)*(board.cellHeight+2);
+
+                drawBingo(x1, y1, x2, y2, order);
+                cells[i][col].IsBingo = true;
+                cells[i-1][col].IsBingo = true;
+                cells[i-2][col].IsBingo = true;
+                cells[i-3][col].IsBingo = true;
+                cells[i-4][col].IsBingo = true;
+                break;
+            }
+        }
+        //대각선 좌상
+        count = 0;
+        i = row;
+        j = col;
+        while(i>0 && j>0){
+            i--;
+            j--;
+        }
+        for(; i<10&&j<10; i++,j++){
+            if(cells[i][j].WhichStone == order || cells[i][j].IsCommon == true)
+                count += 1;
+            else
+                count = 0;
+
+            if(count == 5){
+                const x1 = (j-4 + 0.5)*(board.cellWidth+2);
+                const x2 = (j + 0.5)*(board.cellWidth+2);
+                const y1 = (i-4 + 0.5)*(board.cellHeight+2);
+                const y2 = (i + 0.5)*(board.cellHeight+2);
+
+                drawBingo(x1, y1, x2, y2, order);
+                cells[i-4][j-4].IsBingo = true;
+                cells[i-3][j-3].IsBingo = true;
+                cells[i-2][j-2].IsBingo = true;
+                cells[i-1][j-1].IsBingo = true;
+                cells[i][j].IsBingo = true;
+                break;
+            }
+        }
+        
+        //대각선 좌하
+        count = 0;
+        i = row;
+        j = col;
+        while(i<9 && j>0){
+            i++;
+            j--;
+        }
+        for(; i>=0&&j<10; i--,j++){
+            if(cells[i][j].WhichStone == order || cells[i][j].IsCommon == true)
+                count += 1;
+            else
+                count = 0;
+
+            if(count == 5){
+                const x1 = (j-4 + 0.5)*(board.cellWidth+2);
+                const x2 = (j + 0.5)*(board.cellWidth+2);
+                const y1 = (i+4 + 0.5)*(board.cellHeight+2);
+                const y2 = (i + 0.5)*(board.cellHeight+2);
+
+                drawBingo(x1, y1, x2, y2, order);
+                cells[i+4][j-4].IsBingo = true;
+                cells[i+3][j-3].IsBingo = true;
+                cells[i+2][j-2].IsBingo = true;
+                cells[i+1][j-1].IsBingo = true;
+                cells[i][j].IsBingo = true;
+                break;
+            }
+        }
+
+        order = (order+1)%2;
+    })
+</script>
