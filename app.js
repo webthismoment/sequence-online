@@ -16,25 +16,27 @@ app.use(express.static(path.join(__dirname, "public")));
 
 server.listen(8080, () => console.log("#### 서버 시작 ####"));
 
-let gameType
-let participants = {
-    "room1vs1":0,
-    "room1vs1vs1":0,
-    "room2vs2":0
+let gameType;
+const Room = require('./classes');
+let rooms = {
+    1001: new Room("1vs1"),
+    2001: new Room("1vs1vs1"),
+    3001: new Room("2vs2"),
 }
-//var indexRouter = require("./routes/index");
 
+//var indexRouter = require("./routes/index");
 //app.use("/", indexRouter);
 app.get("/", (req, res, next)=>{
     res.render("index.ejs", {
         title: 'Express',
-        participants
+        rooms
     })
 })
 
-app.get("/room/:gameType", (req, res, next)=>{
+app.get("/room/:roomID", (req, res, next)=>{
     res.render("room.ejs", {
-        gameType: req.params.gameType,
+        //gameType: req.params.gameType,
+        roomID: req.params.roomID
     })
 })
 
@@ -48,18 +50,19 @@ io.on("connection", (socket) => {
     const { url } = socket.request;
     console.log(`연결됨: ${url}`);
 
-    socketReceive(io, socket, participants);
+    socketReceive(io, socket, rooms);
     
     //disconnect
     socket.on("disconnecting", (reason) => {
-        for (const room of socket.rooms) {
-            if (room !== socket.id) {
+        for (const r of socket.rooms) {
+            if (r !== socket.id) {
                 //socket.to(room).emit("user has left", socket.id);
-                participants[room] -= 1;
+                const idx = rooms[r].Users.indexOf(socket.id);
+                rooms[r].Users.splice(idx,1);
             }
         }
     })
     socket.on("disconnect", (reason)=>{
-        console.log("user disconnected");
+        console.log(`user disconnected ${socket.id}`);
     })
 });

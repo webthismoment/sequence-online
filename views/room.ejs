@@ -12,7 +12,7 @@
     <!-- MDB -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.10.2/mdb.min.css" rel="stylesheet" />
 
-    <title><%= gameType %></title>
+    <title>Sequence <%= roomID %></title>
     <style>
         .container-540{
             width:540px;
@@ -27,57 +27,86 @@
 </head>
 <body>
     <div class="container-540">
-        <div class="text-center">
-            <button type="button" class="btn btn-primary" onClick="GameStart();" disabled id="StartBtn"> Game Start!! </button>
+        <div class="text-center div-button">
+            <button type="button" class="btn btn-primary" onClick="GameInit();" disabled id="StartBtn"> Game Start!! </button>
         </div>
+        <%- include ('layout/board.html') %>
     </div>
-    <%- include ('layout/board.html') %>
 
     <!-- MDB -->
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.10.2/mdb.min.js" ></script>
     <script src="https://cdn.socket.io/4.4.1/socket.io.min.js" integrity="sha384-fKnu0iswBIqkjxrhQCTZ7qlLHOFEgNkRmK2vaO/LbTZSXdJfAu6ewRBdwHPhBo/H" crossorigin="anonymous"></script>
     <script>
         const socket = io()
-        socket.emit("join:room", 
+        const roomID = <%= roomID %>;
+        let team = -1; //0,1
+        let user = -1; //0,1,2,3
+        socket.emit("room:join", 
             {
-                gameType: "<%= gameType %>",
-                //roomId: roomId
+                //gameType: 
+                roomID: roomID
             }
         );
 
-        //game board function
-
         //receive socket
-        socket.on("game:ready", (data)=>{
+        socket.on("room:full", (data)=>{
             //if(user.IsRoomMaster)
             document.getElementById("StartBtn").disabled = false;
         })
-        socket.on("game:init", (data)=>{
+        socket.on("game:randomizeOrder", (data)=>{
+            user = data.order;
+            team = user%2;
+        })
+        socket.on("game:start", (data)=>{
             console.log("Start!")
+            $(".div-button").hide();
+            alert(`순서:${user+1}`)
+            //display board
         })
         socket.on("game:placeStone-ACK", (data)=>{
+            console.log(data);
+            drawStone(data.stone);
             //if(data.accepted)
-            //else
         })
 
 
         //socket function
-        function GameStart(){
-            socket.emit("game:roomMasterInit", "")
-        }
-        function PlaceStone(){
-            socket.emit("game:placeStone", {})
-        }
-
-
-        function callbacked(){
-            socket.emit("callback", {"id":1, "pw":222}, (res)=>{
-                console.log(res);
+        function GameInit(){
+            socket.emit("game:init", {
+                roomID: roomID,
+            },
+            res=>{
+                if(!res.result){
+                    alert(res.message);
+                    return false;
+                }
+                    
             })
         }
-        function orderCreate(){
-            socket.emit("order:create", {"id":1, "pw":222})
+        function PlaceStone(user, row, col){
+            socket.emit(
+                "game:placeStone",
+                {
+                    roomID: roomID,
+                    stone: [user, row, col],
+                    card: ["heart", 1]
+                },
+                (res)=>{
+                    if(!res.result){
+                        alert(res.message);
+                        return false;
+                    }
+                }
+            )
         }
+        // function callbacked(){
+        //     socket.emit("callback", {"id":1, "pw":222}, (res)=>{
+        //         console.log(res);
+        //     })
+        // }
+        // function orderCreate(){
+        //     socket.emit("order:create", {"id":1, "pw":222})
+        // }
     </script>
 </body>
 </html>

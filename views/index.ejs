@@ -31,21 +31,17 @@
 <body>
     <div class="container-540 mt-5">
         <ul class="list-group list-cursor-point">
+            <% 
+                for(key in rooms){
+            %>
             <li class="list-group-item d-flex justify-content-between align-items-center"
-                onClick="location.href='/room/1vs1'">
-                1vs1
-                <span class="badge bg-primary rounded-pill"><%= participants.room1vs1 %>/2</span>
+                onClick="location.href='/room/<%=key%>'">
+                <%=rooms[key].GameType%>
+                <span class="badge bg-primary rounded-pill"><%=rooms[key].Users.length%>/<%=rooms[key].MaxUser%></span>
             </li>
-            <li class="list-group-item d-flex justify-content-between align-items-center"
-                onClick="location.href='/room/1vs1vs1'">
-                1vs1vs1
-                <span class="badge bg-primary rounded-pill"><%= participants.room1vs1vs1 %>/3</span>
-            </li>
-            <li class="list-group-item d-flex justify-content-between align-items-center"
-            onClick="location.href='/room/2vs2'">
-                2vs2
-                <span class="badge bg-primary rounded-pill"><%= participants.room2vs2 %>/4</span>
-            </li>
+            <%
+                }
+            %>
           </ul>
 
         <!-- <a href="room/1vs1">1vs1</a>

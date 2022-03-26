@@ -28,7 +28,6 @@
     }
     .stone-team-0{color: green;}
     .stone-team-1{color: blue;}
-    .stone-team-2{color: purple;}
 
     .bingo {
         position:absolute;
@@ -40,18 +39,13 @@
     .bingo.active{display:block;}
     .bingo-team-0 {border-color: #3fff3f;}
     .bingo-team-1 {border-color: #5252ff;}
-    .bingo-team-2 {border-color: #cb00cb;}
 </style>
-<div>
+<div class="container-540">
     <h1>Sequence Online</h1>
     <div class="row">
         <div class="col-12 game-board">
-            <div class="bingo bingo-team-0 bingo-1st"></div>
-            <div class="bingo bingo-team-1 bingo-1st"></div>
-            <div class="bingo bingo-team-2 bingo-1st"></div>
-            <div class="bingo bingo-team-0 bingo-2nd"></div>
-            <div class="bingo bingo-team-1 bingo-2nd"></div>
-            <div class="bingo bingo-team-2 bingo-2nd"></div>
+            <div class="bingo bingo-team-0"></div>
+            <div class="bingo bingo-team-1"></div>
             <div class="row 1">
                 <div class="col circle"></div>
                 <div class="col spade">2</div>
@@ -198,8 +192,37 @@
     board.cells = [];
     board.cellHeight = $(".game-board .col:first").height();
     board.cellWidth = $(".game-board .col:first").width();
-   
-    const drawLine = (team, x1, y1, x2, y2, order) => {
+    for(i=0;i<10;i++){
+        board.cells[i] = [];
+        for(j=0;j<10;j++)
+        board.cells[i][j] = new Cell();
+    }
+    board.cells[0][0].IsCommon = board.cells[0][9].IsCommon = board.cells[9][0].IsCommon = board.cells[9][9].IsCommon = true;
+    let order = 0;
+    /*
+    const detectBingo = () => {
+        for(){	//iterate
+            if(board[][] == "team1"){
+                count++;
+                if(count == 5){
+                    return true;
+                }
+            }	
+            else
+                count = 0;
+            if(board[][]-1 == "already bingo" && board[][]+1 == "aleady bingo")
+                count = 0;
+            
+        }
+    };
+    */
+    
+    const bingoCheck = () => {
+        //common인가
+        //WhichStone
+        //IsBingo이라면 앞뒤 확인
+    }
+    const drawBingo = (x1, y1, x2, y2, team) => {
         const a = x1-x2;
         const b = y1-y2;
         const c = Math.sqrt(a*a + b*b);
@@ -211,40 +234,24 @@
         const y = sy;
 
         const alpha = Math.PI - Math.atan2(-b,a);
-        $(`.bingo-team-${team}.bingo-${order}`).addClass("active").css({
+        $(`.bingo-team-${order}`).addClass("active").css({
             "top":`${y}px`,
             "left":`${x}px`,
             "width":`${c}px`,
             "transform":`rotate(${alpha}rad)`
         });
     }
-    const drawBingo = (team, r1, c1, r2, c2, order) => {
-        if(Math.abs(r1-r2) !== 5 && Math.abs(c1-c2) !== 5){
-            console.log("No length 5");
-            return false;
-        }
-        
-        const height = $(".game-board .col:first").height()+2;
-        const width = $(".game-board .col:first").width()+2;
-        const x1 = (c1 + 0.5)*(width);
-        const x2 = (c2 + 0.5)*(width);
-        const y1 = (r1 + 0.5)*(height);
-        const y2 = (r2 + 0.5)*(height);
-
-        drawLine(team, x1, y1, x2, y2, order);
-    }
-    const drawStone = ([user, row, col]) => {
-        $stone = `<i class="fas fa-circle stone stone-team-${user}"></i>`;
-        $(`.game-board .row:nth(${row}) .col:nth(${col})`).append($stone);
-    }
-
     $(".game-board .col:not('.circle')").click(function(){
         $this = $(this);
-        // if($this.html().includes("stone")){
-        //     alert("돌을 놓을 수 없습니다.");
-        //     return;
-        // }
+        if($this.html().includes("stone")){
+            alert("돌을 놓을 수 없습니다.");
+            return;
+        }
 
+        $stone = `<i class="fas fa-circle stone stone-team-${order}"></i>`;
+        $this.append($stone);
+
+        //board[i][j]
         let row, col, i, j, sum, diff;
         const cells = board.cells;
         for(i=0;i<10;i++){
@@ -253,10 +260,9 @@
                 {
                     row = i;
                     col = j;
-                    //sum = i+j;
-                    //diff = Math.abs(i-j);
-                    //cells[i][j].WhichStone = order;
-                    PlaceStone(user, row, col);
+                    sum = i+j;
+                    diff = Math.abs(i-j);
+                    cells[i][j].WhichStone = order;
                     break;
                 }
             }
@@ -264,113 +270,113 @@
 
         //연속 5개 감지
         //row
-        // let count = 0;
-        // for(j=0;j<10;j++){
-        //     if(cells[row][j].WhichStone == order || cells[row][j].IsCommon == true)
-        //         count += 1;
-        //     else 
-        //         count = 0;
+        let count = 0;
+        for(j=0;j<10;j++){
+            //bingoCheck()
+            if(cells[row][j].WhichStone == order || cells[row][j].IsCommon == true)
+                count += 1;
+            else 
+                count = 0;
             
-        //     if(count == 5){
-        //         const x1 = (j-4 + 0.5)*(board.cellWidth+2);
-        //         const x2 = (j + 0.5)*(board.cellWidth+2);
-        //         const y1 = (row + 0.5)*(board.cellHeight+2);
-        //         const y2 = (row + 0.5)*(board.cellHeight+2);
+            if(count == 5){
+                const x1 = (j-4 + 0.5)*(board.cellWidth+2);
+                const x2 = (j + 0.5)*(board.cellWidth+2);
+                const y1 = (row + 0.5)*(board.cellHeight+2);
+                const y2 = (row + 0.5)*(board.cellHeight+2);
 
-        //         drawBingo(x1, y1, x2, y2, order);
-        //         cells[row][j].IsBingo = true;
-        //         cells[row][j-1].IsBingo = true;
-        //         cells[row][j-2].IsBingo = true;
-        //         cells[row][j-3].IsBingo = true;
-        //         cells[row][j-4].IsBingo = true;
-        //         break;
-        //     }
-        // }
-
+                drawBingo(x1, y1, x2, y2, order);
+                cells[row][j].IsBingo = true;
+                cells[row][j-1].IsBingo = true;
+                cells[row][j-2].IsBingo = true;
+                cells[row][j-3].IsBingo = true;
+                cells[row][j-4].IsBingo = true;
+                break;
+            }
+        }
         //col
-        // count = 0;
-        // for(i=0;i<10;i++){
-        //     if(cells[i][col].WhichStone == order || cells[i][col].IsCommon == true)
-        //         count += 1;
-        //     else 
-        //         count = 0;
+        count = 0;
+        for(i=0;i<10;i++){
+            //bingoCheck()
+            if(cells[i][col].WhichStone == order || cells[i][col].IsCommon == true)
+                count += 1;
+            else 
+                count = 0;
             
-        //     if(count == 5){
-        //         const x1 = (col + 0.5)*(board.cellWidth+2);
-        //         const x2 = (col + 0.5)*(board.cellWidth+2);
-        //         const y1 = (i-4 + 0.5)*(board.cellHeight+2);
-        //         const y2 = (i + 0.5)*(board.cellHeight+2);
+            if(count == 5){
+                const x1 = (col + 0.5)*(board.cellWidth+2);
+                const x2 = (col + 0.5)*(board.cellWidth+2);
+                const y1 = (i-4 + 0.5)*(board.cellHeight+2);
+                const y2 = (i + 0.5)*(board.cellHeight+2);
 
-        //         drawBingo(x1, y1, x2, y2, order);
-        //         cells[i][col].IsBingo = true;
-        //         cells[i-1][col].IsBingo = true;
-        //         cells[i-2][col].IsBingo = true;
-        //         cells[i-3][col].IsBingo = true;
-        //         cells[i-4][col].IsBingo = true;
-        //         break;
-        //     }
-        // }
-
+                drawBingo(x1, y1, x2, y2, order);
+                cells[i][col].IsBingo = true;
+                cells[i-1][col].IsBingo = true;
+                cells[i-2][col].IsBingo = true;
+                cells[i-3][col].IsBingo = true;
+                cells[i-4][col].IsBingo = true;
+                break;
+            }
+        }
         //대각선 좌상
-        // count = 0;
-        // i = row;
-        // j = col;
-        // while(i>0 && j>0){
-        //     i--;
-        //     j--;
-        // }
-        // for(; i<10&&j<10; i++,j++){
-        //     if(cells[i][j].WhichStone == order || cells[i][j].IsCommon == true)
-        //         count += 1;
-        //     else
-        //         count = 0;
+        count = 0;
+        i = row;
+        j = col;
+        while(i>0 && j>0){
+            i--;
+            j--;
+        }
+        for(; i<10&&j<10; i++,j++){
+            if(cells[i][j].WhichStone == order || cells[i][j].IsCommon == true)
+                count += 1;
+            else
+                count = 0;
 
-        //     if(count == 5){
-        //         const x1 = (j-4 + 0.5)*(board.cellWidth+2);
-        //         const x2 = (j + 0.5)*(board.cellWidth+2);
-        //         const y1 = (i-4 + 0.5)*(board.cellHeight+2);
-        //         const y2 = (i + 0.5)*(board.cellHeight+2);
+            if(count == 5){
+                const x1 = (j-4 + 0.5)*(board.cellWidth+2);
+                const x2 = (j + 0.5)*(board.cellWidth+2);
+                const y1 = (i-4 + 0.5)*(board.cellHeight+2);
+                const y2 = (i + 0.5)*(board.cellHeight+2);
 
-        //         drawBingo(x1, y1, x2, y2, order);
-        //         cells[i-4][j-4].IsBingo = true;
-        //         cells[i-3][j-3].IsBingo = true;
-        //         cells[i-2][j-2].IsBingo = true;
-        //         cells[i-1][j-1].IsBingo = true;
-        //         cells[i][j].IsBingo = true;
-        //         break;
-        //     }
-        // }
+                drawBingo(x1, y1, x2, y2, order);
+                cells[i-4][j-4].IsBingo = true;
+                cells[i-3][j-3].IsBingo = true;
+                cells[i-2][j-2].IsBingo = true;
+                cells[i-1][j-1].IsBingo = true;
+                cells[i][j].IsBingo = true;
+                break;
+            }
+        }
         
         //대각선 좌하
-        // count = 0;
-        // i = row;
-        // j = col;
-        // while(i<9 && j>0){
-        //     i++;
-        //     j--;
-        // }
-        // for(; i>=0&&j<10; i--,j++){
-        //     if(cells[i][j].WhichStone == order || cells[i][j].IsCommon == true)
-        //         count += 1;
-        //     else
-        //         count = 0;
+        count = 0;
+        i = row;
+        j = col;
+        while(i<9 && j>0){
+            i++;
+            j--;
+        }
+        for(; i>=0&&j<10; i--,j++){
+            if(cells[i][j].WhichStone == order || cells[i][j].IsCommon == true)
+                count += 1;
+            else
+                count = 0;
 
-        //     if(count == 5){
-        //         const x1 = (j-4 + 0.5)*(board.cellWidth+2);
-        //         const x2 = (j + 0.5)*(board.cellWidth+2);
-        //         const y1 = (i+4 + 0.5)*(board.cellHeight+2);
-        //         const y2 = (i + 0.5)*(board.cellHeight+2);
+            if(count == 5){
+                const x1 = (j-4 + 0.5)*(board.cellWidth+2);
+                const x2 = (j + 0.5)*(board.cellWidth+2);
+                const y1 = (i+4 + 0.5)*(board.cellHeight+2);
+                const y2 = (i + 0.5)*(board.cellHeight+2);
 
-        //         drawBingo(x1, y1, x2, y2, order);
-        //         cells[i+4][j-4].IsBingo = true;
-        //         cells[i+3][j-3].IsBingo = true;
-        //         cells[i+2][j-2].IsBingo = true;
-        //         cells[i+1][j-1].IsBingo = true;
-        //         cells[i][j].IsBingo = true;
-        //         break;
-        //     }
-        // }
+                drawBingo(x1, y1, x2, y2, order);
+                cells[i+4][j-4].IsBingo = true;
+                cells[i+3][j-3].IsBingo = true;
+                cells[i+2][j-2].IsBingo = true;
+                cells[i+1][j-1].IsBingo = true;
+                cells[i][j].IsBingo = true;
+                break;
+            }
+        }
 
-        //order = (order+1)%2;
+        order = (order+1)%2;
     })
 </script>
