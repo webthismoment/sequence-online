@@ -23,21 +23,154 @@
                 width: 100%;
             }
         }
+
+        .timer{
+            position: relative;
+        }
+        .timer-inner{
+            position: absolute;
+            top:0;
+            left:0;
+            width:60px;
+            height:60px;
+            line-height:60px;
+            text-align:center;
+        }
+
+        .card-back{
+            background-image:url('/images/card-back2-vertical.png');
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: contain;
+        }
+        .user-cards .card-back{
+            width:13px;
+            height:20px;
+            margin:2px;
+        }
+        .card-table .card-back{
+            width:95%;
+            height:80px;
+        }
+        .card-draw{
+            height: 55px;
+            background-image:url('/images/card-back2.png');
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: contain;
+        }
     </style>
 </head>
 <body>
-    <div class="container-540">
+    <div class="container container-540">
+        <div class="row">
+            <div class="col-4 d-flex">
+                <div class="timer">
+                    <div class="timer-inner">1P</div>
+                </div>
+                <div class="user-cards d-inline-flex flex-wrap align-items-center">
+                    <div class="card-back"></div>
+                    <div class="card-back"></div>
+                    <div class="card-back"></div>
+                    <div class="card-back"></div>
+                    <div class="card-back"></div>
+                    <div class="card-back"></div>
+                </div>
+            </div>
+            <div class="col-4 time" style="background:rgba(0,0,0,0)">
+
+            </div>
+            <div class="col-4 d-flex">
+                <div class="timer">
+                    <div class="timer-inner">2P</div>
+                </div>
+                <div class="user-cards d-inline-flex flex-wrap align-items-center">
+                    <div class="card-back"></div>
+                    <div class="card-back"></div>
+                    <div class="card-back"></div>
+                    <div class="card-back"></div>
+                    <div class="card-back"></div>
+                    <div class="card-back"></div>
+                </div>
+            </div>
+        </div>
+        <%- include ('layout/board.html') %>
+        <div class="row">
+            <div class="col-4 d-flex">
+                <div class="timer">
+                    <div class="timer-inner">3P</div>
+                </div>
+                <div class="user-cards d-inline-flex flex-wrap align-items-center">
+                    <div class="card-back"></div>
+                    <div class="card-back"></div>
+                    <div class="card-back"></div>
+                    <div class="card-back"></div>
+                    <div class="card-back"></div>
+                    <div class="card-back"></div>
+                </div>
+            </div>
+            <div class="col-4">
+                
+            </div>
+            <div class="col-4 d-flex">
+                <div class="timer">
+                    <div class="timer-inner">4P</div>
+                </div>
+                <div class="user-cards d-inline-flex flex-wrap align-items-center">
+                    <div class="card-back"></div>
+                    <div class="card-back"></div>
+                    <div class="card-back"></div>
+                    <div class="card-back"></div>
+                    <div class="card-back"></div>
+                    <div class="card-back"></div>
+                </div>
+            </div>
+        </div>
+        <div class="row mb-2">
+            <div class="col-4 offset-4">
+                <div class="card-draw"></div>
+            </div>
+        </div>
+        <div class="row g-2 mb-2">
+            <div class="col card-table"><div class="card-back"></div></div>
+            <div class="col card-table"><div class="card-back"></div></div>
+            <div class="col card-table"><div class="card-back"></div></div>
+            <div class="col card-table"><div class="card-back"></div></div>
+            <div class="col card-table"><div class="card-back"></div></div>
+            <div class="col card-table"><div class="card-back"></div></div>
+        </div>
         <div class="text-center div-button">
             <button type="button" class="btn btn-primary" onClick="GameInit();" disabled id="StartBtn"> Game Start!! </button>
         </div>
-        <%- include ('layout/board.html') %>
     </div>
+
+    <!-- jquery-circle-progress-->
+    <!-- TODO: layout/board.html에 jquery 있음 / 순서 적절히 변경할 것 -->
+    <!-- NOTE: https://github.com/kottenator/jquery-circle-progress -->
+    <script type="text/javascript" src="/resources/jquery-circle-progress/circle-progress.min.js" ></script>
+    <script>
+        let val = 100;
+        let time = 30;
+        let size = 60;
+        $(".timer").circleProgress({
+            startAngle: Math.PI * 1.5,
+            value: val/100,
+            size: size,
+            thickness: 10,
+            emptyFill: "#ed3c49",
+            fill: "rgba(0,0,0,.1)",
+            animation: {
+                duration:1000*time,
+                easing: "linear"
+            },
+        })
+    </script>
 
     <!-- MDB -->
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.10.2/mdb.min.js" ></script>
     <script src="https://cdn.socket.io/4.4.1/socket.io.min.js" integrity="sha384-fKnu0iswBIqkjxrhQCTZ7qlLHOFEgNkRmK2vaO/LbTZSXdJfAu6ewRBdwHPhBo/H" crossorigin="anonymous"></script>
     <script>
-        const socket = io()
+        const socket = io();
         const roomID = <%= roomID %>;
         let team = -1; //0,1
         let user = -1; //0,1,2,3
@@ -70,7 +203,7 @@
         })
 
 
-        //socket function
+        //send socket
         function GameInit(){
             socket.emit("game:init", {
                 roomID: roomID,
@@ -99,14 +232,6 @@
                 }
             )
         }
-        // function callbacked(){
-        //     socket.emit("callback", {"id":1, "pw":222}, (res)=>{
-        //         console.log(res);
-        //     })
-        // }
-        // function orderCreate(){
-        //     socket.emit("order:create", {"id":1, "pw":222})
-        // }
     </script>
 </body>
 </html>

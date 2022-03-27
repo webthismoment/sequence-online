@@ -33,7 +33,7 @@ class Room {
 
 class GameInfo{
     constructor(users){
-        InitBoard();
+        this.InitBoard();
         this.Users = users;
         this.MaxUser = this.Users.length;
 
@@ -80,6 +80,7 @@ class GameInfo{
         return this.Board[row][col].Pattern === pattern;
     }
     IsValidateCardAndStone(user, row, col, value, IsSideView){
+        console.log(user, row, col, value, IsSideView);
         const cell = this.Board[row][col];
         if(cell.IsCommon)
             return false;
