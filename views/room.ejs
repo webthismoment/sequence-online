@@ -43,14 +43,24 @@
             background-repeat: no-repeat;
             background-size: contain;
         }
+        .card-spade-jack-front{ background-image:url('/images/card-spade-jack-front.png'); }
+        .card-spade-jack-side{ background-image:url('/images/card-spade-jack-side.png'); }
+        .card-heart-jack-front{ background-image:url('/images/card-heart-jack-front.png'); }
+        .card-spade-jack-front-short{ background-image:url('/images/card-spade-jack-front-short.png'); }
+        .card-spade-jack-side-short{ background-image:url('/images/card-spade-jack-side-short.png'); }
+        .card-diamond-jack-front-perm{ background-image:url('/images/card-diamond-jack-front-perm.png'); }
+        .card-diamond-jack-side-perm{ background-image:url('/images/card-diamond-jack-side-perm.png'); }
         .user-cards .card-back{
             width:13px;
             height:20px;
             margin:2px;
         }
-        .card-table .card-back{
+        .card-table .card-hand{
             width:95%;
             height:80px;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: contain;
         }
         .card-draw{
             height: 55px;
@@ -132,12 +142,12 @@
             </div>
         </div>
         <div class="row g-2 mb-2">
-            <div class="col card-table"><div class="card-back"></div></div>
-            <div class="col card-table"><div class="card-back"></div></div>
-            <div class="col card-table"><div class="card-back"></div></div>
-            <div class="col card-table"><div class="card-back"></div></div>
-            <div class="col card-table"><div class="card-back"></div></div>
-            <div class="col card-table"><div class="card-back"></div></div>
+            <div class="col card-table"><div class="card-hand card-spade-jack-front"></div></div>
+            <div class="col card-table"><div class="card-hand card-spade-jack-side"></div></div>
+            <div class="col card-table"><div class="card-hand card-spade-jack-front-short"></div></div>
+            <div class="col card-table"><div class="card-hand card-spade-jack-side-short"></div></div>
+            <div class="col card-table"><div class="card-hand card-diamond-jack-front-perm"></div></div>
+            <div class="col card-table"><div class="card-hand card-diamond-jack-side-perm"></div></div>
         </div>
         <div class="text-center div-button">
             <button type="button" class="btn btn-primary" onClick="GameInit();" disabled id="StartBtn"> Game Start!! </button>
